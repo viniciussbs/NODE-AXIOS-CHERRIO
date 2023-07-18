@@ -1,38 +1,41 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const fetchData = async (url) => {
+const recebeURL = async (url) => {
     const result = await axios.get(url)
     return result.data;
 }
-
+ 
 const main = async () => {
-    const content = await fetchData("https://stardewvalleywiki.com/Villagers")
-    const $ = cheerio.load(content)
-    let villagers = []
 
-    //Pega o texto dentro do seletor no caso o H1
-    /*const title = $('h1').text()
-            console.log(title);*/
+    const conteudoDaUrl = await recebeURL("https://ge.globo.com/futebol/times/botafogo/")
+    const $ = cheerio.load(conteudoDaUrl)
+
+    /*const exibeDados = $('h1').text()*/
+    /*const exibeDados = $('h2').text()*/
+    /*const exibeDados = $('title').text()
+    console.log(exibeDados);*/
+
     
+    //Função que encontra links de materia e retora com os links ordenados
     /*$('h2').each((i, e) => {
         console.log(`O h2 na posição ${i} tem o valor igual a: ${$(e).text()}`);    
     })*/
+ 
+    let materias = []
 
-    $('li.gallerybox').each((i, e) => {
+    //Função que acessa os links e extrai titulos e subtitulos
+    $('h2').each((i, e) => {
         //informar o caminiha ate o chegar ao a e pega o valor do texto que esta nele
-        const title = $(e).find('.gallerytext > p > a').text();
-        const avatar = "https://stardewvalleywiki.com" + $(e).find('.thumb > div > a > img').attr("src");
-        const link = "https://stardewvalleywiki.com" + $(e).find('.gallerytext > p > a').attr("href");
+        const tituloMateria= $(e).find('a > ul> li > div > div > h2').text();
+        const subtituloMateria = "https://ge.globo.com/futebol/times/botafogo/" + $(e).find('li > div > div > span').attr("src");
         
         //Criando um obj com o valores a serem retornados 
-        const data = { title, avatar, link }
-        villagers.push(data);
+        const data = { tituloMateria, subtituloMateria}
+        materias.push(data);
       
     })
-
-    console.log(villagers);
-
+   
 }
 
 main();
