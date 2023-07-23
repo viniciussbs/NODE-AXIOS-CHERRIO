@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const logger = require('../../logger')('ge/team-page');
 
 const recebeURL = async (url) => {
     const result = await axios.get(url)
@@ -7,6 +8,7 @@ const recebeURL = async (url) => {
 }
 
 exports.main = async () => {
+    logger.log('Starting...');
 
     const conteudoDaUrl = await recebeURL("https://ge.globo.com/futebol/times/botafogo/")
     const $ = cheerio.load(conteudoDaUrl)
@@ -36,4 +38,5 @@ exports.main = async () => {
 
     })
 
+    logger.log('Finished.');
 }
